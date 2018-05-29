@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>MatCalc</title>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="style.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
+		<script src="https://use.fontawesome.com/f3009b4d7d.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+	</head>
+	
+	<body>
+		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
+			<form>
+			<div class="form-row">
+				<div class="form-group">
+					<div class="col">
+						<div class="form-control">
+							<input type="button" value="-"></input>
+							<input type="text"></input>
+							<input type="button" value="+"></input>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-control">
+							<select name="recipeSelector" ng-model="recipe" ng-options="recipe as recipe.name for recipe in recipes">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			</form>
+			{{ recipe.name }} <br/>
+			{{ recipe.type }} <br/>
+			{{ recipe.mats }} <br/>
+		</div>
+		<script src="matcalcApp.js"></script>
+		<script src="matcalcCtrl.js"></script>
+	</body>
+</html>	
