@@ -18,11 +18,18 @@
 		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<input type="number" class="form-control col-md-1 mr-2"></input>
-				<select name="recipeSelector" ng-model="recipe" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
+				<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
 			</nav>
 			
-			<ul>
-				<li ng-repeat="ingredient in recipe.mats">{{ ingredient.qty }} {{ ingredient.recipe.name}}
+			<script type="text/ng-template" id="recipeTree">
+					<a href="#" ng-click="getRecipe(recipe)">{{ recipe.name }}</a>
+					<ul ng-if="recipe.tree">
+						<li ng-repeat="recipe in recipe.tree" ng-include="'recipeTree'">
+					</ul>
+			</script>
+						
+			<ul ng-show="recipe.name">
+				<li ng-include="'recipeTree'">
 			</ul>
 			
 		</div>
