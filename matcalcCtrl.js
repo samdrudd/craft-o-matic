@@ -32,8 +32,8 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 			
 			if (recipe.synths) {
 				for (key in recipe.synths) {
-					console.log(recipe.synths[key]);
 					newRecipe = [recipe.synths[key]].map(mapRecipe)[0];
+					newRecipe.quantity = recipe.quantity;
 				}
 			}
 						
@@ -68,7 +68,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 			
 			Recipe.get(newVal.id)
 				.then(
-					(res) => { console.log(res.data); scope.recipe = [res.data].map(mapRecipe)[0]; },
+					(res) => { scope.recipe = [res.data].map(mapRecipe)[0]; },
 					(res) => {}
 				);
 		});

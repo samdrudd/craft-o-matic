@@ -22,8 +22,8 @@
 			</nav>
 			
 			<script type="text/ng-template" id="recipeTree">
-					<img ng-src="{{ recipe.icon }}" width="40" height="40" class="mr-2">{{ recipe.quantity}} {{ recipe.name }}
-					<ul ng-if="recipe.tree">
+					<a href="#collapse{{recipe.id}}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" width="40" height="40" class="mr-2">{{ recipe.quantity}} {{ recipe.name }}</a>
+					<ul ng-if="recipe.tree" id="collapse{{recipe.id}}" class="collapse">
 						<li ng-repeat="recipe in recipe.tree" ng-include="'recipeTree'" class="pt-2">
 					</ul>
 			</script>
