@@ -4,11 +4,48 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 		$scope.recipeSelection = {};
 		$scope.recipe = {};
 		
+		var mapfunc = function(obj) {
+			var newObj = {
+				name : obj.name,
+				id : obj.id,
+				icon : obj.icon
+			};
+			return newObj;
+		};
+		
+		var mapRecipe = function(recipe) {
+			
+			var newRecipe = {
+				id : recipe.id,
+				name : recipe.name,
+				icon : recipe.icon
+			};
+			
+			if (recipe.craft_quantity)
+				newRecipe.makes = recipe.craft_quantity;
+			
+			if (recipe.quantity)
+				newRecipe.quantity = recipe.quantity;
+			
+			if (recipe.tree && recipe.tree.length)
+				newRecipe.tree = recipe.tree.map(mapRecipe);
+			
+			if (recipe.synths) {
+				for (key in recipe.synths) {
+					console.log(recipe.synths[key]);
+					newRecipe = [recipe.synths[key]].map(mapRecipe)[0];
+				}
+			}
+						
+			return newRecipe;
+		};
 		
 		$scope.init = function() {
 			Recipe.getAll()
 				.then(
-					(res) => { $scope.recipes = res.data.recipes.results; },
+					(res) => { 
+						$scope.recipes = res.data.recipes.results.map(mapfunc);
+					},
 					(res) => {}
 				);
 		};
@@ -31,7 +68,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 			
 			Recipe.get(newVal.id)
 				.then(
-					(res) => { scope.recipe = res.data; },
+					(res) => { console.log(res.data); scope.recipe = [res.data].map(mapRecipe)[0]; },
 					(res) => {}
 				);
 		});

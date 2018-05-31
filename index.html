@@ -22,9 +22,9 @@
 			</nav>
 			
 			<script type="text/ng-template" id="recipeTree">
-					<a href="#" ng-click="getRecipe(recipe)">{{ recipe.name }}</a>
+					<img ng-src="{{ recipe.icon }}" width="40" height="40" class="mr-2">{{ recipe.quantity}} {{ recipe.name }}
 					<ul ng-if="recipe.tree">
-						<li ng-repeat="recipe in recipe.tree" ng-include="'recipeTree'">
+						<li ng-repeat="recipe in recipe.tree" ng-include="'recipeTree'" class="pt-2">
 					</ul>
 			</script>
 						
