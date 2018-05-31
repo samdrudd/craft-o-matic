@@ -17,7 +17,6 @@
 	<body>
 		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<input type="number" class="form-control col-md-1 mr-2"></input>
 				<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
 			</nav>
 			
@@ -28,7 +27,7 @@
 					</ul>
 			</script>
 						
-			<ul ng-show="recipe.name">
+			<ul ng-show="recipe.name" class="mt-4">
 				<li ng-include="'recipeTree'">
 			</ul>
 			

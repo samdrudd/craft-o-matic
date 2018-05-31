@@ -2,3 +2,13 @@ button, .btn, .sortable, .fa
 {
 	cursor: pointer;
 }
+
+ul
+{
+	list-style-type: none;
+}
+
+li
+{
+	margin-left: -15px;
+}
