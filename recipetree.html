@@ -1,0 +1,11 @@
+<img ng-src="{{ recipe.icon }}" width="40" height="40">
+<span ng-if="recipe.quantity > 0">
+	<input ng-model="recipe.have" type="number" class="ml-2"></input> / <b>{{ recipe.quantity }}</b>
+</span>
+<span ng-class="{'ml-1': !recipe.quantity, 'complete': recipe.isComplete()}">
+	{{ recipe.name }}
+	<span class="fa fa-check" ng-show="recipe.isComplete()"></span>
+</span>
+<ul ng-if="recipe.tree" ng-class="(recipe.isComplete()) ? 'collapse' : 'expand'">
+	<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree class="pt-2">
+</ul>

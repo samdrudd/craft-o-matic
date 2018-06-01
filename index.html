@@ -19,25 +19,10 @@
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
 			</nav>
-			
-			<script type="text/ng-template" id="recipeTree">
-				<img ng-src="{{ recipe.icon }}" width="40" height="40">
-				<span ng-if="recipe.quantity > 0">
-					<input ng-model="recipe.have" type="number" class="ml-2"></input> / <b>{{ recipe.quantity }}</b>
-				</span>
-				<span ng-class="{'ml-1': !recipe.quantity, 'complete': recipe.isComplete()}">
-					{{ recipe.name }}
-					<span class="fa fa-check" ng-show="recipe.isComplete()"></span>
-				</span>
-				<ul ng-if="recipe.tree" ng-class="(recipe.isComplete()) ? 'collapse' : 'expand'">
-					<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" ng-include="'recipeTree'" class="pt-2">
-				</ul>
-			</script>
-						
+									
 			<ul ng-show="recipe.name" class="mt-4">
-				<li ng-include="'recipeTree'">
-			</ul>
-			
+				<li mc-recipe-tree>
+			</ul>			
 		</div>
 			
 		<script src="matcalcApp.js"></script>

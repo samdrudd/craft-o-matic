@@ -75,4 +75,9 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 				);
 		});
 	}
-]);
+])
+.directive('mcRecipeTree', function() {
+	return {
+		templateUrl: 'recipetree.html'
+	};
+});
