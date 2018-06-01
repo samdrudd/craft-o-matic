@@ -19,10 +19,18 @@
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
 			</nav>
-									
-			<ul ng-show="recipe.name" class="mt-4">
-				<li mc-recipe-tree>
-			</ul>			
+
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col" ng-repeat="recipe in selectedRecipes">
+						<a href="#" ng-click="delete($index)">&times;</a>
+						<ul ng-show="recipe.name">
+							<li mc-recipe-tree recipe="recipe">
+						</ul>
+					</div>
+				</div>
+			</div>
+		
 		</div>
 			
 		<script src="matcalcApp.js"></script>

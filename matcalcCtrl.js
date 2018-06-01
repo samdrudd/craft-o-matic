@@ -2,7 +2,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 	function($scope, $timeout, $filter, Recipe) {
 		$scope.recipes = [];
 		$scope.recipeSelection = {};
-		$scope.recipe = {};
+		$scope.selectedRecipes = [];
 		
 		var mapfunc = function(obj) {
 			var newObj = {
@@ -48,13 +48,6 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 			return newRecipe;
 		};
 		
-		$scope.isComplete = function(recipe) {
-			if (recipe.have === recipe.quantity)
-				return "complete";
-			else
-				return "";
-		}
-		
 		$scope.init = function() {
 			Recipe.getAll()
 				.then(
@@ -64,13 +57,17 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 					(res) => {}
 				);
 		};
+		
+		$scope.delete = function(index) {
+			$scope.selectedRecipes.splice(index, 1);
+		};
 				
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
 			if (oldVal === newVal) return;
 			
 			Recipe.get(newVal.id)
 				.then(
-					(res) => { scope.recipe = [res.data].map(mapRecipe)[0]; },
+					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
 					(res) => {}
 				);
 		});
@@ -78,6 +75,9 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 ])
 .directive('mcRecipeTree', function() {
 	return {
+		scope: {
+			recipe: '=recipe'
+		},
 		templateUrl: 'recipetree.html'
 	};
 });
