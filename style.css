@@ -12,3 +12,14 @@ li
 {
 	margin-left: -15px;
 }
+
+input[type=number]
+{
+	width: 25pt;
+}
+
+.complete
+{
+	color: green;
+	font-style: underline;
+}

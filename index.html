@@ -21,12 +21,15 @@
 			</nav>
 			
 			<script type="text/ng-template" id="recipeTree">
-					<a href="#collapse{{recipe.id}}" data-toggle="collapse">
-						<img ng-src="{{ recipe.icon }}" width="40" height="40" class="mr-2"><span ng-if="recipe.quantity > 0">{{ recipe.quantity }} </span>{{ recipe.name }}
-					</a>
-					<ul ng-if="recipe.tree" id="collapse{{recipe.id}}" class="collapse">
-						<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" ng-include="'recipeTree'" class="pt-2">
-					</ul>
+				<img ng-src="{{ recipe.icon }}" width="40" height="40" class="mr-2">
+				<span ng-if="recipe.quantity > 0">
+					<input ng-model="recipe.have" type="number"></input> out of <b>{{ recipe.quantity }}</b> 
+				</span>
+				<a href="#collapse{{recipe.id}}" data-toggle="collapse" ng-class="isComplete(recipe)">{{ recipe.name }}</a>
+				 <span class="fa fa-check complete" ng-show="(recipe.have === recipe.quantity)"></span>
+				<ul ng-if="recipe.tree" id="collapse{{recipe.id}}" class="collapse">
+					<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" ng-include="'recipeTree'" class="pt-2">
+				</ul>
 			</script>
 						
 			<ul ng-show="recipe.name" class="mt-4">

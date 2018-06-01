@@ -18,7 +18,8 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 			var newRecipe = {
 				id : recipe.id,
 				name : recipe.name,
-				icon : recipe.icon
+				icon : recipe.icon,
+				have : 0
 			};
 			
 			newRecipe.isCrystal = (recipe.category_name === "Crystal");
@@ -36,11 +37,19 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 				for (key in recipe.synths) {
 					newRecipe = [recipe.synths[key]].map(mapRecipe)[0];
 					newRecipe.quantity = recipe.quantity;
+					newRecipe.have = 0;
 				}
 			}
 			
 			return newRecipe;
 		};
+		
+		$scope.isComplete = function(recipe) {
+			if (recipe.have === recipe.quantity)
+				return "complete";
+			else
+				return "";
+		}
 		
 		$scope.init = function() {
 			Recipe.getAll()
