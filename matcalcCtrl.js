@@ -41,6 +41,10 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 				}
 			}
 			
+			newRecipe.isComplete = function() {
+				return (newRecipe.have >= newRecipe.quantity);
+			};
+			
 			return newRecipe;
 		};
 		
