@@ -3,7 +3,7 @@ var app = angular.module('matcalc', []);
 app.factory('Recipe', ['$http', function($http) {
 	
 	var Recipe = {};
-	var urlBase = "http://api.xivdb.com/";
+	var urlBase = "https://api.xivdb.com/";
 		
 	Recipe.getAll = function() {
 		return $http({
