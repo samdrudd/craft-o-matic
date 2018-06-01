@@ -14,12 +14,14 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 		};
 		
 		var mapRecipe = function(recipe) {
-			
+						
 			var newRecipe = {
 				id : recipe.id,
 				name : recipe.name,
 				icon : recipe.icon
 			};
+			
+			newRecipe.isCrystal = (recipe.category_name === "Crystal");
 			
 			if (recipe.craft_quantity)
 				newRecipe.makes = recipe.craft_quantity;
@@ -36,7 +38,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 					newRecipe.quantity = recipe.quantity;
 				}
 			}
-						
+			
 			return newRecipe;
 		};
 		
@@ -48,19 +50,6 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 					},
 					(res) => {}
 				);
-		};
-				
-		$scope.getRecipe = function(recipe, callback) {
-			if (!recipe.connect_craftable) return;
-			
-			for (key in recipe.synths) {
-				console.log(key);
-				Recipe.get(key)
-					.then(
-						(res) => { console.log(res.data); },
-						(res) => {}
-					);
-			}
 		};
 				
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
