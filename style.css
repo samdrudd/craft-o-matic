@@ -21,7 +21,7 @@ input[type=number]
 .complete
 {
 	color: green;
-	font-style: underline;
+	font-weight: bold;
 }
 
 a > img

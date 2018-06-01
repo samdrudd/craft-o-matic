@@ -21,20 +21,15 @@
 			</nav>
 			
 			<script type="text/ng-template" id="recipeTree">
-				<span ng-if="recipe.tree">
-					<a href="#collapse{{recipe.id}}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" width="40" height="40"></a>
-				</span>
-				
-				<span ng-if="!recipe.tree">
-					<img ng-src="{{ recipe.icon }}" width="40" height="40">
-				</span>
-				
+				<img ng-src="{{ recipe.icon }}" width="40" height="40">
 				<span ng-if="recipe.quantity > 0">
-					<input ng-model="recipe.have" type="number" class="ml-2"></input> out of <b>{{ recipe.quantity }}</b> 
+					<input ng-model="recipe.have" type="number" class="ml-2"></input> / <b>{{ recipe.quantity }}</b>
 				</span>
-				<span ng-class="(!recipe.quantity) ? 'ml-1' : ''">{{ recipe.name }}</span>
-				 <span class="fa fa-check complete" ng-show="(recipe.have === recipe.quantity)"></span>
-				<ul ng-if="recipe.tree" id="collapse{{recipe.id}}" class="collapse">
+				<span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}">
+					{{ recipe.name }}
+					<span class="fa fa-check" ng-show="(recipe.have >= recipe.quantity)"></span>
+				</span>
+				<ul ng-if="recipe.tree" ng-class="(recipe.have >= recipe.quantity) ? 'collapse' : 'expand'">
 					<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" ng-include="'recipeTree'" class="pt-2">
 				</ul>
 			</script>
