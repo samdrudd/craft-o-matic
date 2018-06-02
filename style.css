@@ -1,3 +1,8 @@
+body
+{
+	background-color: #f8f9fa;
+}
+
 button, .btn, .sortable, .fa
 {
 	cursor: pointer;
@@ -29,4 +34,18 @@ a > img
 	border: 2px solid;
 	border-radius: 10px;
 	box-shadow: 2px 2px #CCC;
+}
+
+.recipe
+{
+	margin: 15px;
+	background-color: #FFF;
+	box-shadow: 2px 2px #EEE;
+	border: 1px solid #CCC;
+	padding: 0;
+}
+
+.corner
+{
+	margin: 0;
 }

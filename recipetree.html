@@ -1,6 +1,6 @@
 <img ng-src="{{ recipe.icon }}" width="40" height="40">
 <span ng-if="recipe.quantity > 0">
-	<input ng-model="recipe.have" type="number" class="ml-2"></input> / <b>{{ recipe.quantity }}</b>
+	<a href="#" ng-click="recipe.have = recipe.have - 1"><i class="fa fa-caret-left"></i></a> {{ recipe.have }} <a href="#" ng-click="recipe.have = recipe.have + 1"><i class="fa fa-caret-right"></i></a> / <b>{{ recipe.quantity }}</b>
 </span>
 <span ng-class="{'ml-1': !recipe.quantity, 'complete': recipe.isComplete()}">
 	{{ recipe.name }}
