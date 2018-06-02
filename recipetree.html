@@ -1,10 +1,10 @@
 <img ng-src="{{ recipe.icon }}" width="40" height="40">
 <span ng-if="recipe.quantity > 0">
-	<a href="#" ng-click="recipe.have = recipe.have - 1"><i class="fa fa-caret-left"></i></a> {{ recipe.have }} <a href="#" ng-click="recipe.have = recipe.have + 1"><i class="fa fa-caret-right"></i></a> / <b>{{ recipe.quantity }}</b>
+	<input ng-model="recipe.have" class="quantity ml-1"> / <b>{{ recipe.quantity }}</b>
 </span>
 <span ng-class="{'ml-1': !recipe.quantity, 'complete': recipe.isComplete()}">
 	{{ recipe.name }}
-	<span class="fa fa-check" ng-show="recipe.isComplete()"></span>
+	<i class="fa fa-check" ng-show="recipe.isComplete()"></i>
 </span>
 <ul ng-if="recipe.tree" ng-class="(recipe.isComplete()) ? 'collapse' : 'expand'">
 	<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="pt-2">

@@ -13,11 +13,6 @@ ul
 	list-style-type: none;
 }
 
-li
-{
-	margin-left: -15px;
-}
-
 div
 {
 	padding: 0;
@@ -58,4 +53,9 @@ a.cancel
 a.cancel:hover
 {
 	color: #AAA;
+}
+
+input.quantity
+{
+	width: 25pt;
 }
