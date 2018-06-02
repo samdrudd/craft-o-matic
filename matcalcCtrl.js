@@ -1,5 +1,5 @@
-app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
-	function($scope, $timeout, $filter, Recipe) {
+app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'Recipe',
+	function($scope, $timeout, $filter, $localStorage, Recipe) {
 		$scope.recipes = [];
 		$scope.recipeSelection = {};
 		$scope.selectedRecipes = [];
@@ -40,15 +40,12 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 					newRecipe.have = 0;
 				}
 			}
-			
-			newRecipe.isComplete = function() {
-				return (newRecipe.have >= newRecipe.quantity);
-			};
-			
+						
 			return newRecipe;
 		};
 		
 		$scope.init = function() {
+			$scope.selectedRecipes = $localStorage.recipes || [];
 			Recipe.getAll()
 				.then(
 					(res) => { 
@@ -71,6 +68,12 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', 'Recipe',
 					(res) => {}
 				);
 		});
+		
+		$scope.$watch('selectedRecipes', (newVal, oldVal, scope) => {
+			if (newVal)
+				$localStorage.recipes = scope.selectedRecipes;
+		}, true);
+				
 	}
 ])
 .directive('mcRecipeTree', function() {

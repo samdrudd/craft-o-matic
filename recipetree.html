@@ -1,11 +1,11 @@
 <img ng-src="{{ recipe.icon }}" width="40" height="40">
 <span ng-if="recipe.quantity > 0">
-	<input ng-model="recipe.have" class="quantity ml-1"> / <b>{{ recipe.quantity }}</b>
+	<input type="number" ng-model="recipe.have" class="quantity ml-1" max="{{recipe.quantity}}"> / <b>{{ recipe.quantity }}</b>
 </span>
-<span ng-class="{'ml-1': !recipe.quantity, 'complete': recipe.isComplete()}">
+<span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}">
 	{{ recipe.name }}
-	<i class="fa fa-check" ng-show="recipe.isComplete()"></i>
+	<i class="fa fa-check" ng-show="(recipe.have >= recipe.quantity)"></i>
 </span>
-<ul ng-if="recipe.tree" ng-class="(recipe.isComplete()) ? 'collapse' : 'expand'">
+<ul ng-if="recipe.tree" ng-class="(recipe.have >= recipe.quantity) ? 'collapse' : 'expand'">
 	<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="pt-2">
 </ul>

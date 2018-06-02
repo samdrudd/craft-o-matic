@@ -1,4 +1,4 @@
-var app = angular.module('matcalc', []);
+var app = angular.module('matcalc', ['ngStorage']);
 
 app.factory('Recipe', ['$http', function($http) {
 	
