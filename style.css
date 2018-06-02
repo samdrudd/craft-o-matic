@@ -18,9 +18,10 @@ li
 	margin-left: -15px;
 }
 
-input[type=number]
+div
 {
-	width: 25pt;
+	padding: 0;
+	margin: 0;
 }
 
 .complete
@@ -29,9 +30,9 @@ input[type=number]
 	font-weight: bold;
 }
 
-a > img
+img
 {
-	border: 2px solid;
+	border: 2px solid #AAA;
 	border-radius: 10px;
 	box-shadow: 2px 2px #CCC;
 }
@@ -43,9 +44,18 @@ a > img
 	box-shadow: 2px 2px #EEE;
 	border: 1px solid #CCC;
 	padding: 0;
+		padding-bottom: 15px;
 }
 
-.corner
+a.cancel
 {
+	padding: 0;
+		padding-left: 5px;
 	margin: 0;
+	color: #DDD;
+}
+
+a.cancel:hover
+{
+	color: #AAA;
 }

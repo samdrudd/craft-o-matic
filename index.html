@@ -23,7 +23,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col recipe" ng-repeat="recipe in selectedRecipes">
-						<a href="#" ng-click="delete($index)" class="corner">&times;</a>
+						<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times"></i></a>
 						<ul ng-show="recipe.name">
 							<li mc-recipe-tree recipe="recipe">
 						</ul>
