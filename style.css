@@ -1,6 +1,7 @@
 body
 {
 	background-color: #f8f9fa;
+	font-size: smaller;
 }
 
 button, .btn, .sortable, .fa
@@ -28,16 +29,26 @@ ul
 .card-header
 {
 	padding: 0;
+	background-color: rgba(0,0,0,.05);
 }
 
 .card-title
 {
-	font-size: 1.3em;
+	margin: 0;
+	padding: 3px;
+	font-size: 1.2em;
+}
+
+.card-text
+{
+	margin: 0;
+	padding: 0;
 }
 
 .card-body
 {
-	padding: 5px;
+	padding: 15px;
+		padding-bottom: 0;
 }
 
 .list
@@ -66,16 +77,6 @@ img.icon
 	box-shadow: 2px 2px #CCC;
 }
 
-.recipe
-{
-	margin: 15px;
-	background-color: #FFF;
-	box-shadow: 2px 2px #EEE;
-	border: 1px solid #CCC;
-	padding: 0;
-		padding-bottom: 15px;
-}
-
 a.cancel
 {
 	color: #DDD;
@@ -91,5 +92,5 @@ a.cancel:hover
 
 input.quantity
 {
-	width: 35pt;
+	width: 30pt;
 }

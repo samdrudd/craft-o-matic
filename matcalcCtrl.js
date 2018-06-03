@@ -15,11 +15,13 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		};
 		
 		var mapRecipe = function(recipe) {
-						
+									
 			var newRecipe = {
 				id : recipe.id,
 				name : recipe.name,
 				icon : recipe.icon,
+				class_name : recipe.class_name,
+				level : recipe.level_view,
 				have : 0
 			};
 			

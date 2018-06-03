@@ -29,7 +29,9 @@
 				</form>
 				<form class="form-inline col-6">
 					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes | orderBy: 'name'" class="form-control col-12">
-						<option value="" selected="selected">-- Make a Selection --</option>
+						<option value="" selected="selected">
+							{{ (recipes.length > 0) ? "Choose a recipe below!" : "No recipes yet. Search for one to the left!" }}
+						</option>
 					</select>
 				</form>
 			</nav>
@@ -39,14 +41,15 @@
 					<div class="col-3" ng-repeat="recipe in selectedRecipes">
 						<div class="card">
 							<div class="card-header text-center">
-								<img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50">
-								<div class="card-title">{{ recipe.name }}</div>
+								<a href="#{{ $index }}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50"></a>
+								<h4 class="card-title">{{ recipe.name }}</h4>
+								<p class="card-text">{{ recipe.class_name }} {{ recipe.level }}</p>
 								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
 							</div>
-							<div class="card-body">
+							<div id="{{ $index }}" class="card-body collapse show">
 								<div class="list">
 									<ul>
-										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe">
+										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="mb-2">
 									</ul>
 								</div>
 							</div>
