@@ -17,8 +17,18 @@
 	
 	<body>
 		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes" class="form-control"></select>
+			<nav class="navbar navbar-light bg-light">
+				<form class="form-inline col-6">
+					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-8"></input>
+					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control">
+						Search <i class="fa fa-spinner fa-spin" ng-show="isSearching"></i>
+					</button>
+				</form>
+				<form class="form-inline col-6">
+					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes | orderBy: 'name'" class="form-control col-12">
+						<option value="" selected="selected">-- Make a Selection --</option>
+					</select>
+				</form>
 			</nav>
 
 			<div class="container-fluid">

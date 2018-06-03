@@ -1,8 +1,9 @@
 app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'Recipe',
 	function($scope, $timeout, $filter, $localStorage, Recipe) {
 		$scope.recipes = [];
-		$scope.recipeSelection = {};
 		$scope.selectedRecipes = [];
+		$scope.search = "";
+		$scope.isSearching = false;
 		
 		var mapfunc = function(obj) {
 			var newObj = {
@@ -46,19 +47,22 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		
 		$scope.init = function() {
 			$scope.selectedRecipes = $localStorage.recipes || [];
-			Recipe.getAll()
+		};
+		
+		$scope.doSearch = function() {
+			$scope.isSearching = true;
+			
+			Recipe.search($scope.search)
 				.then(
-					(res) => { 
-						$scope.recipes = res.data.recipes.results.map(mapfunc);
-					},
-					(res) => {}
+					(res) => { $scope.recipes = res.data.recipes.results.map(mapfunc); $scope.isSearching = false; },
+					(res) => { $scope.isSearching = false; }
 				);
 		};
 		
 		$scope.delete = function(index) {
 			$scope.selectedRecipes.splice(index, 1);
 		};
-				
+		
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
 			if (oldVal === newVal) return;
 			

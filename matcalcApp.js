@@ -5,12 +5,12 @@ app.factory('Recipe', ['$http', function($http) {
 	var Recipe = {};
 	var urlBase = "https://api.xivdb.com/";
 		
-	Recipe.getAll = function() {
+	Recipe.search = function(searchString) {
 		return $http({
 				url: urlBase + "search",
 				params: {
-					"one" : "recipes",
-					"level|gt" : 325
+					"string" : searchString,
+					"one" : "recipes"
 				},
 				method: "GET"});
 	};
