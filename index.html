@@ -34,13 +34,23 @@
 				</form>
 			</nav>
 
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col recipe" ng-repeat="recipe in selectedRecipes">
-						<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times"></i></a>
-						<ul ng-show="recipe.name">
-							<li mc-recipe-tree recipe="recipe">
-						</ul>
+			<div class="container-fluid px-4">
+				<div class="row no-gutters">
+					<div class="col-3" ng-repeat="recipe in selectedRecipes">
+						<div class="card">
+							<div class="card-header text-center">
+								<img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50">
+								<div class="card-title">{{ recipe.name }}</div>
+								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
+							</div>
+							<div class="card-body">
+								<div class="list">
+									<ul>
+										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe">
+									</ul>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
