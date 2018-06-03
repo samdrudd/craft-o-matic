@@ -59,6 +59,14 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 				);
 		};
 		
+		$scope.clearAll = function() {
+			if (confirm("Are you sure about that?")) {	
+				$scope.selectedRecipes = [];
+				$scope.search = "";
+				$scope.recipes = [];
+			}
+		}
+		
 		$scope.delete = function(index) {
 			$scope.selectedRecipes.splice(index, 1);
 		};
