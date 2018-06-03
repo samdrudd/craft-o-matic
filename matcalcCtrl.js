@@ -54,7 +54,12 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 			
 			Recipe.search($scope.search)
 				.then(
-					(res) => { $scope.recipes = res.data.recipes.results.map(mapfunc); $scope.isSearching = false; },
+					(res) => { 
+						$scope.recipes = res.data.recipes.results.map(mapfunc);
+						if ($scope.recipes.length === 1)
+							$scope.recipeSelection = $scope.recipes[0]
+						$scope.isSearching = false; 
+					},
 					(res) => { $scope.isSearching = false; }
 				);
 		};
@@ -73,7 +78,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
 			if (oldVal === newVal) return;
-			
+					
 			Recipe.get(newVal.id)
 				.then(
 					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
