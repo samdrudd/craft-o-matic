@@ -3,7 +3,7 @@
 	<input type="number" ng-model="recipe.have" class="quantity ml-1"> / <b>{{ recipe.quantity }}</b>
 </span>
 <span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}">
-	{{ recipe.name }}
+	<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
 	<i class="fa fa-check" ng-show="(recipe.have >= recipe.quantity)"></i>
 </span>
 <ul ng-if="recipe.tree" id="{{ $index }}" ng-class="(recipe.have >= recipe.quantity) ? '' : 'show'" class="collapse">

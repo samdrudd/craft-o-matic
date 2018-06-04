@@ -22,6 +22,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 				icon : recipe.icon,
 				class_name : recipe.class_name,
 				level : recipe.level_view,
+				url : recipe.url_xivdb,
 				have : 0
 			};
 			
