@@ -18,16 +18,27 @@
 	<body>
 		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
 			<nav class="navbar navbar-light bg-light">
-				<form class="form-inline col-5">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-8"></input>
+				<form class="form-inline col-6">
+					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-7"></input>
 					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
 						Search <i class="fa fa-spinner fa-spin" ng-show="isSearching"></i>
 					</button>
-					<button type="button" ng-click="clearAll()" class="btn btn-secondary form-control">
+					<button type="button" ng-click="clearAll()" class="btn btn-secondary form-control mr-1">
 						Clear All
 					</button>
+					<div class="dropdown">
+						<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+							Totals
+						</button>
+						<div class="dropdown-menu">
+							<div class="dropdown-item" ng-repeat="(name, item) in totals">
+								<img ng-src="{{ item.icon }}" height="40" width="40" class="icon mr-1">
+								<input type="number" ng-model="item.have" class="quantity"> / {{ item.quantity }} <a href="{{ item.url }}" target="_blank">{{ name }}</a>
+							</div>
+						</div>
+					</div>
 				</form>
-				<form class="form-inline col-5">
+				<form class="form-inline col-4">
 					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes | orderBy: 'name'" class="form-control col-12">
 						<option value="" selected="selected">
 							{{ (recipes.length > 0) ? "Choose a recipe below!" : "No recipes yet. Search for one to the left!" }}
