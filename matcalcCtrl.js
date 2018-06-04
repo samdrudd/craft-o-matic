@@ -4,6 +4,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		$scope.selectedRecipes = [];
 		$scope.search = "";
 		$scope.isSearching = false;
+		$scope.totals = {};
 		
 		var mapfunc = function(obj) {
 			var newObj = {
@@ -44,7 +45,18 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					newRecipe.have = 0;
 				}
 			}
-						
+			
+			if (!newRecipe.tree && !newRecipe.isCrystal) {
+				if ($scope.totals[newRecipe.name])
+					$scope.totals[newRecipe.name].need += newRecipe.quantity;
+				else {
+					$scope.totals[newRecipe.name] = {
+						need : newRecipe.quantity,
+						have : 0
+					};
+				}
+			}
+			
 			return newRecipe;
 		};
 		
@@ -84,7 +96,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					
 			Recipe.get(newVal.id)
 				.then(
-					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
+					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); console.log($scope.totals); },
 					(res) => {}
 				);
 		});
