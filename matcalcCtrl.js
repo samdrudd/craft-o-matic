@@ -15,6 +15,32 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 			return newObj;
 		};
 		
+		var calculateTotals = function(recipe) {
+			// If the recipe is a crystal, return
+			if (recipe.isCrystal) return;
+			
+			// If the recipe has no tree, add it to totals
+			if (recipe.tree) {
+				// Run calculateTotals on recipes in tree
+				for (var i = 0; i < recipe.tree.length; i++) {
+					calculateTotals(recipe.tree[i]);
+				}
+			} else {
+				if ($scope.totals[recipe.name]) {
+					$scope.totals[recipe.name].quantity += recipe.quantity;
+					$scope.totals[recipe.name].have += recipe.have;
+				} else {
+					$scope.totals[recipe.name] = {
+						icon : recipe.icon,
+						url : recipe.url,
+						quantity : recipe.quantity,
+						have : recipe.have
+					};
+				}
+			}
+				
+		}
+		
 		var mapRecipe = function(recipe) {
 									
 			var newRecipe = {
@@ -45,23 +71,16 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					newRecipe.have = 0;
 				}
 			}
-			
-			if (!newRecipe.tree && !newRecipe.isCrystal) {
-				if ($scope.totals[newRecipe.name])
-					$scope.totals[newRecipe.name].need += newRecipe.quantity;
-				else {
-					$scope.totals[newRecipe.name] = {
-						need : newRecipe.quantity,
-						have : 0
-					};
-				}
-			}
-			
+						
 			return newRecipe;
 		};
 		
 		$scope.init = function() {
 			$scope.selectedRecipes = $localStorage.recipes || [];
+			
+			for (var i = 0; i < $scope.selectedRecipes.length; i++) {
+				calculateTotals($scope.selectedRecipes[i]);
+			}
 		};
 		
 		$scope.doSearch = function() {
@@ -84,6 +103,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 				$scope.selectedRecipes = [];
 				$scope.search = "";
 				$scope.recipes = [];
+				$scope.totals = {};
 			}
 		}
 		
@@ -96,14 +116,20 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					
 			Recipe.get(newVal.id)
 				.then(
-					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); console.log($scope.totals); },
+					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
 					(res) => {}
 				);
 		});
 		
 		$scope.$watch('selectedRecipes', (newVal, oldVal, scope) => {
-			if (newVal)
+			if (newVal) {
 				$localStorage.recipes = scope.selectedRecipes;
+				scope.totals = {};
+				for (var i = 0; i < scope.selectedRecipes.length; i++) {
+					calculateTotals(scope.selectedRecipes[i]);
+				}
+				console.log(scope.totals);
+			}
 		}, true);
 				
 	}
