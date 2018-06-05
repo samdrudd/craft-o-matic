@@ -37,6 +37,18 @@ ul
 	background-color: rgba(0,0,0,.05);
 }
 
+.card-header:hover
+{
+	cursor: grab;
+	cursor: -webkit-grab;
+}
+
+.card-header:active:hover
+{
+	cursor: grabbing;
+	cursor: -webkit-grabbing;
+}
+
 .card-title
 {
 	margin: 0;
