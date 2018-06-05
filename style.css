@@ -4,7 +4,7 @@ body
 	font-size: smaller;
 }
 
-button, .btn, .sortable, .fa
+.clickable, button
 {
 	cursor: pointer;
 }

@@ -1,4 +1,4 @@
-<img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40">
+<img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40" ng-click="recipe.collapsed = !recipe.collapsed" ng-class="(recipe.tree) ? 'clickable' : ''">
 <span ng-if="recipe.quantity > 0">
 	<input type="number" ng-model="recipe.have" class="quantity ml-1"> / <b>{{ recipe.quantity }}</b>
 </span>
@@ -6,6 +6,6 @@
 	<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
 	<i class="fa fa-check" ng-show="(recipe.have >= recipe.quantity)"></i>
 </span>
-<ul ng-if="recipe.tree" id="{{ $index }}" ng-class="(recipe.have >= recipe.quantity) ? '' : 'show'" class="collapse">
+<ul ng-if="recipe.tree" id="{{ $index }}" ng-class="((recipe.have >= recipe.quantity) || recipe.collapsed) ? '' : 'show'" class="collapse">
 	<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="my-2">
 </ul>
