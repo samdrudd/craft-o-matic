@@ -1,4 +1,3 @@
-<i class="fa px-1" ng-show="recipe.tree" ng-class="(recipe.collapsed) ? 'fa-caret-right' : 'fa-caret-down'"></i>
 <img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40" ng-click="recipe.collapsed = !recipe.collapsed" ng-class="(recipe.tree) ? 'clickable' : ''">
 <span ng-if="recipe.quantity > 0">
 	<input type="number" ng-model="recipe.have" class="quantity ml-1"> / <b>{{ recipe.quantity }}</b>
