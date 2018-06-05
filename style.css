@@ -69,6 +69,11 @@ ul
 	font-weight: bold;
 }
 
+.complete a
+{
+	color: green;
+}
+
 img.header
 {
 	margin: 0;
