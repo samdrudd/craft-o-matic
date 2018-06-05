@@ -54,7 +54,7 @@
 							<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
 								<div class="list">
 									<ul>
-										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="mb-2">
+										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false} | orderBy: 'tree'" mc-recipe-tree recipe="recipe" class="mb-2">
 									</ul>
 								</div>
 							</div>
