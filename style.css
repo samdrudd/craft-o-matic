@@ -104,3 +104,26 @@ input.quantity
 {
 	width: 30pt;
 }
+
+
+/* bootbox styling fixes / changes */
+.modal-header
+{
+	display: block;
+}
+
+.modal-header .close
+{
+	margin: 0;
+	padding: 0;
+	position: absolute;
+		top: 0;
+		right: 5px;
+}
+
+.modal-title
+{
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}

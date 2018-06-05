@@ -70,11 +70,16 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		};
 		
 		$scope.clearAll = function() {
-			if (confirm("Are you sure about that?")) {	
-				$scope.selectedRecipes = [];
-				$scope.search = "";
-				$scope.recipes = [];
-			}
+			bootbox.confirm({
+				title: "Are you sure?",
+				message: "This will <b>remove all selected recipes</b>. Click 'OK' to proceed.", 
+				callback: (res) => {
+					if (res) {
+						$scope.selectedRecipes = [];
+						$scope.$digest();
+					}
+				}
+			});
 		}
 		
 		$scope.delete = function(index) {
