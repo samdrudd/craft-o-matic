@@ -19,7 +19,7 @@
 		<div ng-app="matcalc" ng-controller="matcalcCtrl" ng-init="init()">
 			<nav class="navbar navbar-light bg-light">
 				<form class="form-inline col-6">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-8"></input>
+					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6"></input>
 					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
 						Search <i class="fa fa-spinner fa-spin" ng-show="isSearching"></i>
 					</button>
@@ -27,10 +27,10 @@
 						Remove All
 					</button>
 					<button type="button" ng-click="collapseAll = !collapseAll" class="btn btn-secondary form-control">
-						{{ (collapseAll) ? "Expand All" : "Collapse All" }}
+						{{ (collapseAll) ? "Expand All" : "Collapse All" }} <i class="fa" ng-class="(collapseAll) ? 'fa-caret-right' : 'fa-caret-down'"></i>
 					</button>
 				</form>
-				<form class="form-inline col-5">
+				<form class="form-inline col-4">
 					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name for recipe in recipes | orderBy: 'name'" class="form-control col-12">
 						<option value="" selected="selected">
 							{{ (recipes.length > 0) ? "Choose a recipe below!" : "No recipes yet. Search for one to the left!" }}
