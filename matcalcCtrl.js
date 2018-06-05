@@ -4,6 +4,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		$scope.selectedRecipes = [];
 		$scope.search = "";
 		$scope.isSearching = false;
+		$scope.collapseAll = false;
 		
 		var mapfunc = function(obj) {
 			var newObj = {
