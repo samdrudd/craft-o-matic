@@ -71,7 +71,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		
 		$scope.clearAll = function() {
 			bootbox.confirm({
-				title: "Are you sure?",
+				title: "<i class='fa fa-exclamation-circle text-secondary'></i> Are you sure?",
 				message: "This will <b>remove all selected recipes</b>. Click 'OK' to proceed.", 
 				callback: (res) => {
 					if (res) {
