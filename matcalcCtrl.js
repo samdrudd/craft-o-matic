@@ -110,4 +110,12 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		},
 		templateUrl: 'recipetree.html'
 	};
+})
+.directive('mcRecipe', function() {
+	return {
+		scope: {
+			recipe: '=recipe'
+		},
+		templateUrl: 'recipe.html'
+	};
 });
