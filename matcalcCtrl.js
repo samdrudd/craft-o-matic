@@ -14,7 +14,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 			};
 			return newObj;
 		};
-		
+				
 		var mapRecipe = function(recipe) {
 									
 			var newRecipe = {
@@ -25,9 +25,10 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 				level : recipe.level_view,
 				url : recipe.url_xivdb,
 				collapsed : false,
+				isCraftable : recipe.connect_craftable,
 				have : 0
 			};
-			
+						
 			newRecipe.isCrystal = (recipe.category_name === "Crystal");
 			
 			if (recipe.craft_quantity)
@@ -45,6 +46,23 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					newRecipe.quantity = recipe.quantity;
 					newRecipe.have = 0;
 				}
+			}
+			
+			if (newRecipe.isCraftable && !newRecipe.tree) {
+				Recipe.getItem(newRecipe.id).then(
+					(res) => { 
+						newRecipe.yields = res.data.craftable[0].craft_quantity;
+						newRecipe.tree = res.data.craftable[0].tree.map(mapRecipe);
+						
+						// Account for recipes that create multiple items when calculating quantity
+						var needed = Math.ceil(newRecipe.quantity / newRecipe.yields);
+						
+						for (var i = 0; i < newRecipe.tree.length; i++) {
+							newRecipe.tree[i].quantity = newRecipe.tree[i].quantity * needed;
+						}
+					},
+					(res) => {}
+				);
 			}
 			
 			return newRecipe;

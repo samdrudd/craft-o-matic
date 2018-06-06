@@ -22,5 +22,12 @@ app.factory('Recipe', ['$http', function($http) {
 				headers: { "Content-Type": "application/x-www-form-urlencoded"}});
 	};
 	
+	Recipe.getItem = function(id) {
+		return $http({
+			url: urlBase + "item/" + id,
+			method: "GET",
+			headers: { "Content-Type": "application/x-www-form-urlencoded"}});
+	};
+	
 	return Recipe;
 }]);
