@@ -16,21 +16,24 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 		};
 				
 		var mapRecipe = function(recipe) {
-									
+												
 			var newRecipe = {
 				id : recipe.id,
 				name : recipe.name,
 				icon : recipe.icon,
-				class_name : recipe.class_name,
-				level : recipe.level_view,
+				class_name : recipe.class_name || '',
+				level : recipe.level_view || 0,
 				url : recipe.url_xivdb,
 				collapsed : false,
-				isCraftable : recipe.connect_craftable,
+				isCraftable : (recipe.connect_craftable > 0),
+				isGatherable : (recipe.connect_gathering > 0),
+				isDrop : (recipe.connect_enemy_drop > 0),
+				canBuy : (recipe.connect_shop > 0),
 				have : 0
 			};
-						
-			newRecipe.isCrystal = (recipe.category_name === "Crystal");
 			
+			newRecipe.isCrystal = (recipe.category_name === "Crystal");
+							
 			if (recipe.craft_quantity)
 				newRecipe.makes = recipe.craft_quantity;
 			
@@ -64,6 +67,7 @@ app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage',
 					(res) => {}
 				);
 			}
+			
 			
 			return newRecipe;
 		};

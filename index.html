@@ -3,13 +3,13 @@
 		<title>MatCalc</title>
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" crossorigin="anonymous">
 		<link rel="stylesheet" href="style.css">
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
-		<script src="https://use.fontawesome.com/f3009b4d7d.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
@@ -27,7 +27,7 @@
 						Remove All
 					</button>
 					<button type="button" ng-click="collapseAll = !collapseAll" class="btn btn-secondary form-control">
-						{{ (collapseAll) ? "Expand All" : "Collapse All" }} <i class="fa" ng-class="(collapseAll) ? 'fa-caret-right' : 'fa-caret-down'"></i>
+						{{ (collapseAll) ? "Expand All" : "Collapse All" }} <i class="fa" ng-class="(collapseAll) ? 'fa-plus-square' : 'fa-minus-square'"></i>
 					</button>
 				</form>
 				<form class="form-inline col-4">
@@ -64,7 +64,7 @@
 			</div>
 		
 		</div>
-			
+					
 		<script src="matcalcApp.js"></script>
 		<script src="matcalcCtrl.js"></script>
 	</body>

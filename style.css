@@ -134,3 +134,15 @@ input.quantity
 {
 	padding: 5px;
 }
+
+/* fa icon styles */
+
+.fa-leaf
+{
+	color: rgba(0,100,0,.5);
+}
+
+.fa-coins
+{
+	color: rgba(200,200,0,.8);
+}

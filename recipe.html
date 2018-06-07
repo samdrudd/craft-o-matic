@@ -2,7 +2,11 @@
 <span ng-if="recipe.quantity > 0">
 	<input type="number" ng-model="recipe.have" class="quantity ml-1" max="{{ recipe.quantity }}"> / <b>{{ recipe.quantity }}</b>
 </span>
-<span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}">
-	<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
-	<i class="fa fa-check" ng-show="(recipe.have >= recipe.quantity)"></i>
+<span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}" class="recipe-name">
+	<span class="mr-2">
+		<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
+		<i class="fa fa-check" ng-show="recipe.have >= recipe.quantity"></i>
+	</span>
+	<i class="fa fa-leaf" ng-show="recipe.isGatherable" title="Can be gathered"></i>
+	<i class="fa fa-coins" ng-show="recipe.canBuy" title="Can be purchased"></i>
 </span>
