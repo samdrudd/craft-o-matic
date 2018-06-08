@@ -1,5 +1,5 @@
-app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'Recipe',
-	function($scope, $timeout, $filter, $localStorage, Recipe) {
+app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'API',
+	function($scope, $timeout, $filter, $localStorage, API) {
 		$scope.recipes = [];
 		$scope.selectedRecipes = [];
 		$scope.search = "";
@@ -49,7 +49,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 			}
 			
 			if (newRecipe.isCraftable && !newRecipe.tree) {
-				Recipe.getItem(newRecipe.id).then(
+				API.getItem(newRecipe.id).then(
 					(res) => { 
 						newRecipe.yields = res.data.craftable[0].craft_quantity;
 						newRecipe.tree = res.data.craftable[0].tree.map(mapRecipe);
@@ -75,7 +75,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		$scope.doSearch = function() {
 			$scope.isSearching = true;
 			
-			Recipe.search($scope.search)
+			API.search($scope.search)
 				.then(
 					(res) => { 
 						$scope.recipes = res.data.recipes.results.map(mapfunc);
@@ -107,7 +107,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
 			if (oldVal === newVal) return;
 					
-			Recipe.get(newVal.id)
+			API.getRecipe(newVal.id)
 				.then(
 					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
 					(res) => {}

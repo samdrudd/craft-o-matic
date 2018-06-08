@@ -1,11 +1,11 @@
 var app = angular.module('craftomatic', ['ngStorage']);
 
-app.factory('Recipe', ['$http', function($http) {
+app.factory('API', ['$http', function($http) {
 	
-	var Recipe = {};
+	var API = {};
 	var urlBase = "https://api.xivdb.com/";
 		
-	Recipe.search = function(searchString) {
+	API.search = function(searchString) {
 		return $http({
 				url: urlBase + "search",
 				params: {
@@ -15,19 +15,19 @@ app.factory('Recipe', ['$http', function($http) {
 				method: "GET"});
 	};
 	
-	Recipe.get = function(id) {
+	API.getRecipe = function(id) {
 		return $http({
 				url: urlBase + "recipe/" + id,
 				method: "GET",
 				headers: { "Content-Type": "application/x-www-form-urlencoded"}});
 	};
 	
-	Recipe.getItem = function(id) {
+	API.getItem = function(id) {
 		return $http({
 			url: urlBase + "item/" + id,
 			method: "GET",
 			headers: { "Content-Type": "application/x-www-form-urlencoded"}});
 	};
 	
-	return Recipe;
+	return API;
 }]);
