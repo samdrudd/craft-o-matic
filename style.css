@@ -134,3 +134,8 @@ input.quantity
 {
 	padding: 5px;
 }
+
+.shadow
+{
+	text-shadow: 1px 1px 1px #000;
+}

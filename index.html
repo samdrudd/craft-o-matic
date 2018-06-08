@@ -21,14 +21,14 @@
 				<form class="form-inline col-6">
 					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6"></input>
 					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
-						<i class="fa fa-lg p-1" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
+						<i class="fa fa-lg p-1 shadow" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
 					</button>
 					<button type="button" ng-click="collapseAll = !collapseAll" class="btn btn-secondary form-control mr-1">
-						<i class="fa fa-expand fa-lg p-1" ng-show="collapseAll" title="Expand all recipes"></i>
-						<i class="fa fa-compress fa-lg p-1" ng-show="!collapseAll" title="Collapse all recipes"></i>
+						<i class="fa fa-expand fa-lg p-1 shadow" ng-show="collapseAll" title="Expand all recipes"></i>
+						<i class="fa fa-compress fa-lg p-1 shadow" ng-show="!collapseAll" title="Collapse all recipes"></i>
 					</button>
 					<button type="button" class="btn btn-danger" ng-click="clearAll()" title="Remove all recipes">
-						<i class="fa fa-trash fa-lg p-1"></i>
+						<i class="fa fa-trash fa-lg p-1 shadow"></i>
 					</button>
 				</form>
 				<form class="form-inline col-5">
