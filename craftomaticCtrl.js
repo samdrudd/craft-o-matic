@@ -1,4 +1,4 @@
-app.controller("matcalcCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'Recipe',
+app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStorage', 'Recipe',
 	function($scope, $timeout, $filter, $localStorage, Recipe) {
 		$scope.recipes = [];
 		$scope.selectedRecipes = [];
