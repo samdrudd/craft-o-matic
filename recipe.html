@@ -1,6 +1,6 @@
 <img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40" ng-click="recipe.collapsed = !recipe.collapsed" ng-class="(recipe.tree) ? 'clickable' : ''">
 <span ng-if="recipe.quantity > 0">
-	<input type="number" ng-model="recipe.have" class="quantity ml-1" max="{{ recipe.quantity }}"> / <b>{{ recipe.quantity }}</b>
+	<input type="number" ng-model="recipe.have" class="quantity ml-1" min="0" max="{{ recipe.quantity }}"> / <b>{{ recipe.quantity }}</b>
 </span>
 <span ng-class="{'ml-1': !recipe.quantity, 'complete': (recipe.have >= recipe.quantity)}">
 	<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
