@@ -109,7 +109,10 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 					
 			API.getRecipe(newVal.id)
 				.then(
-					(res) => { scope.selectedRecipes.push([res.data].map(mapRecipe)[0]); },
+					(res) => { 
+						scope.selectedRecipes.push([res.data].map(mapRecipe)[0]);
+						scope.recipeSelection = {};
+						},
 					(res) => {}
 				);
 		});
