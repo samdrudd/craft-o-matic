@@ -105,7 +105,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		};
 		
 		$scope.$watch('recipeSelection', (newVal, oldVal, scope) => {
-			if (oldVal === newVal) return;
+			if (!newVal || !newVal.id) return;
 					
 			API.getRecipe(newVal.id)
 				.then(
