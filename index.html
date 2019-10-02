@@ -52,13 +52,13 @@
 								<p class="card-text">{{ recipe.class_name }} {{ recipe.level }}</p>
 								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
 							</div>
-							<!--<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
+							<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
 								<div class="list">
 									<ul>
-										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false} | orderBy: 'tree'" mc-recipe-tree recipe="recipe" class="mb-2">
+										<li ng-repeat="ingredient in recipe.ingredients" mc-recipe recipe="ingredient" class="mb-2">
 									</ul>
 								</div>
-							</div>-->
+							</div>
 						</div>
 					</div>
 				</div>

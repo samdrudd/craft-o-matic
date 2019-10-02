@@ -26,6 +26,27 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 				//isCraftable : recipe.connect_craftable,
 				have : 0
 			};
+			
+			var ingredients = {}
+			
+			// Loop through AmountIngredients
+			for (var i = 0; i < 10; i++) {
+				key = "AmountIngredient" + i;
+				qty = recipe[key];
+				if (qty > 0)
+					ingredients[i] = qty;
+			}
+			
+			newRecipe.ingredients = []
+			
+			for (key in ingredients) {
+				ingr = {};
+				ingr.have = 0;
+				ingr.quantity = ingredients[key];
+				ingr.name = recipe["ItemIngredient" + key]["Name"];
+				ingr.icon = 'https://xivapi.com' + recipe["ItemIngredient" + key]["Icon"];
+				newRecipe.ingredients.push(ingr);
+			}
 						
 			//newRecipe.isCrystal = (recipe.category_name === "Crystal");
 			/*
@@ -63,6 +84,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 				);
 			}*/
 			
+			console.log(newRecipe);
 			return newRecipe;
 		};
 		
