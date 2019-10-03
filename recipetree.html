@@ -1,4 +1,4 @@
 <span mc-recipe recipe="recipe"></span>
-<ul ng-if="recipe.tree">
-	<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false}" mc-recipe-tree recipe="recipe" class="my-2">
+<ul ng-if="recipe.ingredients">
+	<li ng-repeat="recipe in recipe.ingredients" mc-recipe-tree recipe="recipe" class="my-2">
 </ul>

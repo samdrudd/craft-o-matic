@@ -13,18 +13,23 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 			};
 			return newObj;
 		};
+		
+		var mapIngredients = function(ingredients) {
+			
+		};
 				
 		var mapRecipe = function(recipe) {
+			console.log(recipe);
 									
 			var newRecipe = {
 				id : recipe.ID,
 				name : recipe.Name,
 				icon : 'https://xivapi.com' + recipe.Icon,
-				class_name : recipe.ClassJob.NameEnglish,
-				level : recipe.RecipeLevelTable.ClassJobLevel,
+				class_name : recipe.ClassJob.NameEnglish || '',
+				level : recipe.RecipeLevelTable.ClassJobLevel || '',
 				collapsed : false,
-				//isCraftable : recipe.connect_craftable,
-				have : 0
+				have : 0,
+				quantity: recipe.Quantity
 			};
 			
 			var ingredients = {}
@@ -37,54 +42,33 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 					ingredients[i] = qty;
 			}
 			
-			newRecipe.ingredients = []
+			newRecipe.ingredients = [];
 			
 			for (key in ingredients) {
+				ingrObj = recipe["ItemIngredient" + key];
+				
+				// Don't bother including crystals
+				if (ingrObj["ItemSearchCategory"]["Name"] == "Crystals")
+					continue;
+				
 				ingr = {};
-				ingr.have = 0;
-				ingr.quantity = ingredients[key];
-				ingr.name = recipe["ItemIngredient" + key]["Name"];
-				ingr.icon = 'https://xivapi.com' + recipe["ItemIngredient" + key]["Icon"];
+								
+				ingredientRecipes = recipe["ItemIngredientRecipe" + key];
+				if (ingredientRecipes != null) {
+					ingredientRecipes[0]["Name"] = recipe["ItemIngredient" + key]["Name"];
+					ingredientRecipes[0]["Icon"] = recipe["ItemIngredient" + key]["Icon"];
+					ingredientRecipes[0]["Quantity"] = ingredients[key];
+					ingr = mapRecipe(ingredientRecipes[0]);
+				} else {
+					ingr.name = recipe["ItemIngredient" + key]["Name"];
+					ingr.icon = "https://xivapi.com" + recipe["ItemIngredient" + key]["Icon"];
+					ingr.quantity = ingredients[key] * newRecipe.quantity;
+					ingr.have = 0;
+				}
+				
 				newRecipe.ingredients.push(ingr);
 			}
-						
-			//newRecipe.isCrystal = (recipe.category_name === "Crystal");
-			/*
-			if (recipe.craft_quantity)
-				newRecipe.makes = recipe.craft_quantity;
 			
-			if (recipe.quantity)
-				newRecipe.quantity = recipe.quantity;
-			
-			if (recipe.tree && recipe.tree.length)
-				newRecipe.tree = recipe.tree.map(mapRecipe);
-			
-			if (recipe.synths) {
-				for (key in recipe.synths) {
-					newRecipe = [recipe.synths[key]].map(mapRecipe)[0];
-					newRecipe.quantity = recipe.quantity;
-					newRecipe.have = 0;
-				}
-			}
-			
-			if (newRecipe.isCraftable && !newRecipe.tree) {
-				API.getItem(newRecipe.id).then(
-					(res) => { 
-						newRecipe.yields = res.data.craftable[0].craft_quantity;
-						newRecipe.tree = res.data.craftable[0].tree.map(mapRecipe);
-						
-						// Account for recipes that create multiple items when calculating quantity
-						var needed = Math.ceil(newRecipe.quantity / newRecipe.yields);
-						
-						for (var i = 0; i < newRecipe.tree.length; i++) {
-							newRecipe.tree[i].quantity = newRecipe.tree[i].quantity * needed;
-						}
-					},
-					(res) => {}
-				);
-			}*/
-			
-			console.log(newRecipe);
 			return newRecipe;
 		};
 		
@@ -129,8 +113,8 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 					
 			API.getRecipe(newVal.id)
 				.then(
-					(res) => { 
-						scope.selectedRecipes.push([res.data].map(mapRecipe)[0]);
+					(res) => {
+						scope.selectedRecipes.push(mapRecipe(res.data));
 						scope.recipeSelection = {};
 						},
 					(res) => {}
