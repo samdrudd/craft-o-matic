@@ -19,7 +19,6 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		};
 				
 		var mapRecipe = function(recipe) {
-			console.log(recipe);
 									
 			var newRecipe = {
 				id : recipe.ID,
@@ -29,7 +28,8 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 				level : recipe.RecipeLevelTable.ClassJobLevel || '',
 				collapsed : false,
 				have : 0,
-				quantity: recipe.Quantity
+				quantity: recipe.Quantity || 1,
+				yields: recipe.AmountResult || 1
 			};
 			
 			var ingredients = {}
@@ -62,7 +62,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 				} else {
 					ingr.name = recipe["ItemIngredient" + key]["Name"];
 					ingr.icon = "https://xivapi.com" + recipe["ItemIngredient" + key]["Icon"];
-					ingr.quantity = ingredients[key] * newRecipe.quantity;
+					ingr.quantity = ingredients[key] * (Math.ceil(newRecipe.quantity / newRecipe.yields));
 					ingr.have = 0;
 				}
 				
