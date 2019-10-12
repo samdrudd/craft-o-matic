@@ -1,4 +1,4 @@
-<img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40">
+<img ng-src="{{ recipe.icon }}" class="icon" width="40" height="40" ng-click="recipe.collapsed = !recipe.collapsed" ng-class="(recipe.ingredients) ? 'clickable' : ''">
 <span ng-if="recipe.quantity > 0">
 	<input type="number" ng-model="recipe.have" class="quantity ml-1" min="0" max="{{ recipe.quantity }}"> / <b>{{ recipe.quantity }}</b>
 </span>

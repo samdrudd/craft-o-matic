@@ -19,7 +19,7 @@
 		<div ng-app="craftomatic" ng-controller="craftomaticCtrl" ng-init="init()">
 			<nav class="navbar navbar-light bg-light">
 				<form class="form-inline col-6">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6"></input>
+					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6" />
 					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
 						<i class="fa fa-lg p-1 shadow" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
 					</button>
