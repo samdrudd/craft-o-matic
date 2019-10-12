@@ -9,6 +9,4 @@ Built by [Silky Sam](https://na.finalfantasyxiv.com/lodestone/character/1746625)
 
 Licenses for any 3rd-party software used by this project can be found in the [ancillary.txt](ancillary.txt) file.
 
-All game data is pulled using the [XIVDB API](https://github.com/xivdb/api) so if you see any inaccurate information blame ~~them, not~~ [me](https://github.com/samdrudd/craft-o-matic/issues/8).
-
-### UPDATE: Since XIVDB API is no more, this project is no longer functional until I migrate to XIVAPI.
+### UPDATE: This project has been migrated to [XIVAPI](https://xivapi.com/) and is now fully functional again!
