@@ -19,7 +19,7 @@
 		<div ng-app="craftomatic" ng-controller="craftomaticCtrl" ng-init="init()">
 			<nav class="navbar navbar-light bg-light">
 				<form class="form-inline col-6">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6"></input>
+					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6" />
 					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
 						<i class="fa fa-lg p-1 shadow" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
 					</button>
@@ -47,7 +47,7 @@
 							<div class="card-header text-center">
 								<a href="#{{ $index }}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50"></a>
 								<h4 class="card-title">
-									<a href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
+									{{ recipe.name }}
 								</h4>
 								<p class="card-text">{{ recipe.class_name }} {{ recipe.level }}</p>
 								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
@@ -55,7 +55,7 @@
 							<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
 								<div class="list">
 									<ul>
-										<li ng-repeat="recipe in recipe.tree | filter:{isCrystal : false} | orderBy: 'tree'" mc-recipe-tree recipe="recipe" class="mb-2">
+										<li ng-repeat="ingredient in recipe.ingredients" mc-recipe-tree recipe="ingredient" class="mb-2">
 									</ul>
 								</div>
 							</div>

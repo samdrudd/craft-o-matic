@@ -8,61 +8,65 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		
 		var mapfunc = function(obj) {
 			var newObj = {
-				name : obj.name,
-				id : obj.id,
-				icon : obj.icon
+				name : obj.Name,
+				id : obj.ID,
 			};
 			return newObj;
+		};
+		
+		var mapIngredients = function(ingredients) {
+			
 		};
 				
 		var mapRecipe = function(recipe) {
 									
 			var newRecipe = {
-				id : recipe.id,
-				name : recipe.name,
-				icon : recipe.icon,
-				class_name : recipe.class_name,
-				level : recipe.level_view,
-				url : recipe.url_xivdb,
+				id : recipe.ID,
+				name : recipe.Name,
+				icon : 'https://xivapi.com' + recipe.Icon,
+				class_name : recipe.ClassJob.NameEnglish || '',
+				level : recipe.RecipeLevelTable.ClassJobLevel || '',
 				collapsed : false,
-				isCraftable : recipe.connect_craftable,
-				have : 0
+				have : 0,
+				quantity: recipe.Quantity || 1,
+				yields: recipe.AmountResult || 1
 			};
-						
-			newRecipe.isCrystal = (recipe.category_name === "Crystal");
 			
-			if (recipe.craft_quantity)
-				newRecipe.makes = recipe.craft_quantity;
+			var ingredients = {}
 			
-			if (recipe.quantity)
-				newRecipe.quantity = recipe.quantity;
-			
-			if (recipe.tree && recipe.tree.length)
-				newRecipe.tree = recipe.tree.map(mapRecipe);
-			
-			if (recipe.synths) {
-				for (key in recipe.synths) {
-					newRecipe = [recipe.synths[key]].map(mapRecipe)[0];
-					newRecipe.quantity = recipe.quantity;
-					newRecipe.have = 0;
-				}
+			// Loop through AmountIngredients
+			for (var i = 0; i < 10; i++) {
+				key = "AmountIngredient" + i;
+				qty = recipe[key];
+				if (qty > 0)
+					ingredients[i] = qty;
 			}
 			
-			if (newRecipe.isCraftable && !newRecipe.tree) {
-				API.getItem(newRecipe.id).then(
-					(res) => { 
-						newRecipe.yields = res.data.craftable[0].craft_quantity;
-						newRecipe.tree = res.data.craftable[0].tree.map(mapRecipe);
-						
-						// Account for recipes that create multiple items when calculating quantity
-						var needed = Math.ceil(newRecipe.quantity / newRecipe.yields);
-						
-						for (var i = 0; i < newRecipe.tree.length; i++) {
-							newRecipe.tree[i].quantity = newRecipe.tree[i].quantity * needed;
-						}
-					},
-					(res) => {}
-				);
+			newRecipe.ingredients = [];
+			
+			for (key in ingredients) {
+				ingrObj = recipe["ItemIngredient" + key];
+				
+				// Don't bother including crystals
+				if (ingrObj["ItemSearchCategory"]["Name"] == "Crystals")
+					continue;
+				
+				ingr = {};
+								
+				ingredientRecipes = recipe["ItemIngredientRecipe" + key];
+				if (ingredientRecipes != null) {
+					ingredientRecipes[0]["Name"] = recipe["ItemIngredient" + key]["Name"];
+					ingredientRecipes[0]["Icon"] = recipe["ItemIngredient" + key]["Icon"];
+					ingredientRecipes[0]["Quantity"] = ingredients[key];
+					ingr = mapRecipe(ingredientRecipes[0]);
+				} else {
+					ingr.name = recipe["ItemIngredient" + key]["Name"];
+					ingr.icon = "https://xivapi.com" + recipe["ItemIngredient" + key]["Icon"];
+					ingr.quantity = ingredients[key] * (Math.ceil(newRecipe.quantity / newRecipe.yields));
+					ingr.have = 0;
+				}
+				
+				newRecipe.ingredients.push(ingr);
 			}
 			
 			return newRecipe;
@@ -78,7 +82,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 			API.search($scope.search)
 				.then(
 					(res) => { 
-						$scope.recipes = res.data.recipes.results.map(mapfunc);
+						$scope.recipes = res.data.Results.map(mapfunc);
 						if ($scope.recipes.length === 1)
 							$scope.recipeSelection = $scope.recipes[0]
 						$scope.isSearching = false; 
@@ -109,13 +113,14 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 					
 			API.getRecipe(newVal.id)
 				.then(
-					(res) => { 
-						scope.selectedRecipes.push([res.data].map(mapRecipe)[0]);
+					(res) => {
+						scope.selectedRecipes.push(mapRecipe(res.data));
 						scope.recipeSelection = {};
 						},
 					(res) => {}
 				);
 		});
+		
 		
 		$scope.$watch('selectedRecipes', (newVal, oldVal, scope) => {
 			if (newVal)
