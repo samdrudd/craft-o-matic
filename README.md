@@ -10,3 +10,4 @@ Built by [Silky Sam](https://na.finalfantasyxiv.com/lodestone/character/1746625)
 Licenses for any 3rd-party software used by this project can be found in the [ancillary.txt](ancillary.txt) file.
 
 ### UPDATE: This project has been migrated to [XIVAPI](https://xivapi.com/) and is now fully functional again!
+#### UPDATE 2: Fantastic timing as about 2 weeks after finishing the migration to XIVAPI, [patch 5.1](https://na.finalfantasyxiv.com/lodestone/topics/detail/3a23a8ba13b2c4152681ec4fa5716915b851002f) came out, which adds exactly this [as an in-game feature](https://gyazo.com/936d0644aaec045a0bf5b7855a6d6774), making this project effectively obsolete.
