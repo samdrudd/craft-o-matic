@@ -6,69 +6,48 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		$scope.isSearching = false;
 		$scope.collapseAll = false;
 		
-		var mapfunc = function(obj) {
-			var newObj = {
-				name : obj.Name,
-				id : obj.ID,
+		var mapBasic = function(recipe) {
+			var basicRecipe = {
+				name : recipe.fields.ItemResult.fields.Name,
+				class_name : recipe.fields.CraftType.fields.Name || '',
+				id : recipe.row_id,
 			};
-			return newObj;
+			return basicRecipe;
 		};
-		
-		var mapIngredients = function(ingredients) {
-			
-		};
-				
+						
 		var mapRecipe = function(recipe) {
 									
 			var newRecipe = {
-				id : recipe.ID,
-				name : recipe.Name,
-				icon : 'https://xivapi.com' + recipe.Icon,
-				class_name : recipe.ClassJob.NameEnglish || '',
-				level : recipe.RecipeLevelTable.ClassJobLevel || '',
+				id : recipe.row_id,
+				name : recipe.fields.ItemResult.fields.Name,
+				icon : "https://v2.xivapi.com/api/asset?path=" + recipe.fields.ItemResult.fields.Icon.path + "&format=jpg",
+				class_name : recipe.fields.CraftType.fields.Name || '',
+				level : recipe.fields.RecipeLevelTable.fields.ClassJobLevel || '',
 				collapsed : false,
 				have : 0,
 				quantity: recipe.Quantity || 1,
-				yields: recipe.AmountResult || 1
+				yields: recipe.AmountResult || 1,
+				ingredients: []
 			};
 			
-			var ingredients = {}
+			var rawIngredientAmounts = recipe.fields.AmountIngredient || [];
+			var rawIngredients = recipe.fields.Ingredient || [];
 			
-			// Loop through AmountIngredients
-			for (var i = 0; i < 10; i++) {
-				key = "AmountIngredient" + i;
-				qty = recipe[key];
-				if (qty > 0)
-					ingredients[i] = qty;
-			}
-			
-			newRecipe.ingredients = [];
-			
-			for (key in ingredients) {
-				ingrObj = recipe["ItemIngredient" + key];
+			for (var i = 0; i < rawIngredients.length; i++) {
+				var curRawIngredient = rawIngredients[i];
+				var curRawIngredientAmount = rawIngredientAmounts[i];
 				
-				// Don't bother including crystals
-				if (ingrObj["ItemSearchCategory"]["Name"] == "Crystals")
-					continue;
-				
-				ingr = {};
-								
-				ingredientRecipes = recipe["ItemIngredientRecipe" + key];
-				if (ingredientRecipes != null) {
-					ingredientRecipes[0]["Name"] = recipe["ItemIngredient" + key]["Name"];
-					ingredientRecipes[0]["Icon"] = recipe["ItemIngredient" + key]["Icon"];
-					ingredientRecipes[0]["Quantity"] = ingredients[key];
-					ingr = mapRecipe(ingredientRecipes[0]);
-				} else {
-					ingr.name = recipe["ItemIngredient" + key]["Name"];
-					ingr.icon = "https://xivapi.com" + recipe["ItemIngredient" + key]["Icon"];
-					ingr.quantity = ingredients[key] * (Math.ceil(newRecipe.quantity / newRecipe.yields));
-					ingr.have = 0;
+				if (curRawIngredientAmount > 0) {
+					var newIngr = {
+						name: curRawIngredient.fields.Name,
+						icon: "https://v2.xivapi.com/api/asset?path=" + curRawIngredient.fields.Icon.path + "&format=jpg",
+						have: 0,
+						quantity: curRawIngredientAmount
+					};
+					newRecipe.ingredients.push(newIngr);
 				}
-				
-				newRecipe.ingredients.push(ingr);
 			}
-			
+
 			return newRecipe;
 		};
 		
@@ -82,7 +61,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 			API.search($scope.search)
 				.then(
 					(res) => { 
-						$scope.recipes = res.data.Results.map(mapfunc);
+						$scope.recipes = res.data.results.map(mapBasic);
 						if ($scope.recipes.length === 1)
 							$scope.recipeSelection = $scope.recipes[0]
 						$scope.isSearching = false; 
@@ -134,7 +113,7 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		scope: {
 			recipe: '=recipe'
 		},
-		templateUrl: 'recipetree.html'
+		templateUrl: './recipetree.html'
 	};
 })
 .directive('mcRecipe', function() {
@@ -142,6 +121,6 @@ app.controller("craftomaticCtrl", ['$scope', '$timeout', '$filter', '$localStora
 		scope: {
 			recipe: '=recipe'
 		},
-		templateUrl: 'recipe.html'
+		templateUrl: './recipe.html'
 	};
 });
