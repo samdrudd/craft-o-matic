@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Silky Sam's Craft-o-Matic</title>
@@ -7,66 +8,136 @@
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
 		<script src="https://use.fontawesome.com/f3009b4d7d.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+		<script src="./api.js"></script>
 	</head>
 	
 	<body>
-		<div ng-app="craftomatic" ng-controller="craftomaticCtrl" ng-init="init()">
+		<div>
 			<nav class="navbar navbar-light bg-light">
-				<form class="form-inline col-6">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6" />
-					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
-						<i class="fa fa-lg p-1 shadow" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
+				<form id="searchForm" class="form-inline col-6">
+					<input type="text" placeholder="Search" class="form-control mr-2 col-6" />
+					<button type="button" class="btn btn-primary form-control mr-1" onclick="doSearch()">
+						<i id="searchIcon" class="fa fa-lg p-1 shadow fa-search" title="Search"></i>
 					</button>
-					<button type="button" ng-click="collapseAll = !collapseAll" class="btn btn-secondary form-control mr-1">
-						<i class="fa fa-expand fa-lg p-1 shadow" ng-show="collapseAll" title="Expand all recipes"></i>
-						<i class="fa fa-compress fa-lg p-1 shadow" ng-show="!collapseAll" title="Collapse all recipes"></i>
+					<button type="button" class="btn btn-secondary form-control mr-1" onclick="expandRecipes()">
+						<i class="fa fa-expand fa-lg p-1 shadow" title="Expand all recipes"></i>
+						<i class="fa fa-compress fa-lg p-1 shadow" title="Collapse all recipes" style="display: none;"></i>
 					</button>
-					<button type="button" class="btn btn-danger" ng-click="clearAll()" title="Remove all recipes">
+					<button type="button" class="btn btn-danger" title="Remove all recipes" onclick="deleteAll()">
 						<i class="fa fa-trash fa-lg p-1 shadow"></i>
 					</button>
 				</form>
 				<form class="form-inline col-5">
-					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name + ' (' + recipe.class_name + ')' for recipe in recipes | orderBy: 'name'" class="form-control col-12">
+					<select id="recipeSelector" name="recipeSelector" class="form-control col-12">
 						<option value="" selected="selected">
-							{{ (recipes.length > 0) ? "Choose a recipe!" : "No recipes yet. Search for one!" }}
+							No recipes yet. Search for one!
 						</option>
 					</select>
 				</form>
 			</nav>
 
-			<div class="container-fluid px-4">
-				<div class="row no-gutters">
-					<div class="col-3" ng-repeat="recipe in selectedRecipes">
+			<div class="container-fluid">
+				<div id="selectedRecipesContainer" class="row">
+					<!-- Selected recipes will be added here -->
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			var searchResults = [];
+			var selectedRecipes = [];
+
+			function populateRecipeSelector() {
+				var recipeSelector = $("#recipeSelector");
+				recipeSelector.empty();
+				if (searchResults.length === 0) {
+					recipeSelector.append("<option value='' selected='selected'>No results found. Try a different search?</option>");
+					return;
+				}
+				recipeSelector.append("<option value='' selected='selected'>Select a recipe...</option>");
+				searchResults.forEach(function(recipe) {
+					recipeSelector.append("<option value='" + recipe.id + "'>" + recipe.name + " (" + recipe.class_name + ")</option>");
+				});
+			}
+
+			function doSearch() {
+				$("#searchIcon").removeClass("fa-search").addClass("fa-spinner fa-spin");
+				var searchString = $("input[placeholder='Search']").val();
+				API.search(searchString, function(data) {
+					searchResults = data;
+					populateRecipeSelector();
+					$("#searchIcon").removeClass("fa-spinner fa-spin").addClass("fa-search");
+				}, function(data) {
+					console.error("Error searching for recipes", data);
+				});
+			}
+
+			function renderNewRecipe(recipe) {
+				var ingredientList = "";
+				recipe.ingredients.forEach((ingredient) => {
+					ingredientList += `
+						<li class="mb-2">
+							<span>
+								<img src="${ingredient.icon}" class="icon" width="40" height="40">
+								<span>
+									<input type="number" class="quantity ml-1" value="${ingredient.have}" min="0" max="${ingredient.quantity}"> / <b>${ingredient.quantity}</b>
+								</span>
+								<span class="ml-1">${ingredient.name}</span>
+								<i class="fa fa-check" style="display: none;"></i>
+							</span>
+						</li>
+					`;
+				});
+
+				var recipeCard = `
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
 						<div class="card">
 							<div class="card-header text-center">
-								<a href="#{{ $index }}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50"></a>
+								<a href="#${recipe.id}" data-toggle="collapse"><img src="${recipe.icon}" class="header float-left" width="50" height="50"></a>
 								<h4 class="card-title">
-									{{ recipe.name }}
+									${recipe.name}
 								</h4>
-								<p class="card-text">{{ recipe.class_name }} {{ recipe.level }}</p>
-								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
+								<p class="card-text">${recipe.class_name} ${recipe.level }</p>
+								<a href="#" class="cancel"><i class="fa fa-times fa-lg"></i></a>
 							</div>
-							<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
+							<div id="${recipe.id}" class="card-body show collapse">
 								<div class="list">
-									<ul>
-										<li ng-repeat="ingredient in recipe.ingredients" mc-recipe-tree recipe="ingredient" class="mb-2">
+									<ul class="ingredientList">
+										${ingredientList}
 									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		
-		</div>
-			
-		<script src="craftomaticApp.js"></script>
-		<script src="craftomaticCtrl.js"></script>
+				`;
+
+				$("#selectedRecipesContainer").append(recipeCard);
+			}
+
+			function selectRecipe() {
+				var selectedRecipeId = $("#recipeSelector").val();
+				API.getRecipeById(selectedRecipeId, function(recipe) {
+					selectedRecipes.push(recipe);
+					renderNewRecipe(recipe);
+				}, function(data) {
+					console.error("Error selecting recipe", data);
+				});
+			}
+
+			$(document).ready(function() {
+				$("#searchForm").on('submit', function(e) {
+					e.preventDefault();
+					doSearch();
+				});
+
+				$("#recipeSelector").change(selectRecipe);
+			});
+		</script>
 	</body>
 </html>
