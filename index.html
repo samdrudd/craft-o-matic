@@ -14,6 +14,10 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 		<script src="./api.js"></script>
+		<script src="./models/RecipeModel.js"></script>
+		<script src="./views/RecipeSearchResultsOptionsView.js"></script>
+		<script src="./views/RecipeSelectedRecipesListView.js"></script>
+		<script src="./controllers/RecipeController.js"></script>
 	</head>
 	
 	<body>
@@ -49,84 +53,38 @@
 		</div>
 
 		<script>
+			const recipeModel = new RecipeModel();
+			const recipeController = new RecipeController(recipeModel);
+			const recipeSearchResultsOptionsView = new RecipeSearchResultsOptionsView("#recipeSelector");
+			const recipeSelectedRecipesListView = new RecipeSelectedRecipesListView("#selectedRecipesContainer");
 
-			var searchResults = [];
-			var selectedRecipes = [];
+			// Register observers
+			recipeModel.addSearchResultsObserver(recipeSearchResultsOptionsView);
+			recipeModel.addSelectedRecipeObserver(recipeSelectedRecipesListView);
 
-			function populateRecipeSelector() {
-				var recipeSelector = $("#recipeSelector");
-				recipeSelector.empty();
-				if (searchResults.length === 0) {
-					recipeSelector.append("<option value='' selected='selected'>No results found. Try a different search?</option>");
-					return;
-				}
-				recipeSelector.append("<option value='' selected='selected'>Select a recipe...</option>");
-				searchResults.forEach(function(recipe) {
-					recipeSelector.append("<option value='" + recipe.id + "'>" + recipe.name + " (" + recipe.class_name + ")</option>");
-				});
-			}
+			// Initial notification to populate list with data from localStorage if it exists
+			recipeModel.notifySelectedRecipeObservers();
 
 			function doSearch() {
 				$("#searchIcon").removeClass("fa-search").addClass("fa-spinner fa-spin");
 				var searchString = $("input[placeholder='Search']").val();
-				API.search(searchString, function(data) {
-					searchResults = data;
-					populateRecipeSelector();
-					$("#searchIcon").removeClass("fa-spinner fa-spin").addClass("fa-search");
-				}, function(data) {
-					console.error("Error searching for recipes", data);
+				recipeController.search(searchString, callbacks = {
+					complete: function() {
+						$("#searchIcon").removeClass("fa-spinner fa-spin").addClass("fa-search");
+					}
 				});
-			}
-
-			function renderNewRecipe(recipe) {
-				var ingredientList = "";
-				recipe.ingredients.forEach((ingredient) => {
-					ingredientList += `
-						<li class="mb-2">
-							<span>
-								<img src="${ingredient.icon}" class="icon" width="40" height="40">
-								<span>
-									<input type="number" class="quantity ml-1" value="${ingredient.have}" min="0" max="${ingredient.quantity}"> / <b>${ingredient.quantity}</b>
-								</span>
-								<span class="ml-1">${ingredient.name}</span>
-								<i class="fa fa-check" style="display: none;"></i>
-							</span>
-						</li>
-					`;
-				});
-
-				var recipeCard = `
-					<div class="col-12 col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
-						<div class="card">
-							<div class="card-header text-center">
-								<a href="#${recipe.id}" data-toggle="collapse"><img src="${recipe.icon}" class="header float-left" width="50" height="50"></a>
-								<h4 class="card-title">
-									${recipe.name}
-								</h4>
-								<p class="card-text">${recipe.class_name} ${recipe.level }</p>
-								<a href="#" class="cancel"><i class="fa fa-times fa-lg"></i></a>
-							</div>
-							<div id="${recipe.id}" class="card-body show collapse">
-								<div class="list">
-									<ul class="ingredientList">
-										${ingredientList}
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				`;
-
-				$("#selectedRecipesContainer").append(recipeCard);
 			}
 
 			function selectRecipe() {
 				var selectedRecipeId = $("#recipeSelector").val();
-				API.getRecipeById(selectedRecipeId, function(recipe) {
-					selectedRecipes.push(recipe);
-					renderNewRecipe(recipe);
-				}, function(data) {
-					console.error("Error selecting recipe", data);
+				recipeController.select(selectedRecipeId);
+			}
+
+			function deleteRecipe(recipeId) {
+				bootbox.confirm("Are you sure you want to delete this recipe?", function(result) {
+					if (result) {
+						recipeController.remove(recipeId);
+					}
 				});
 			}
 
@@ -138,6 +96,7 @@
 
 				$("#recipeSelector").change(selectRecipe);
 			});
+
 		</script>
 	</body>
 </html>
