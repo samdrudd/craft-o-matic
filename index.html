@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Silky Sam's Craft-o-Matic</title>
@@ -7,66 +8,95 @@
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
 		<script src="https://use.fontawesome.com/f3009b4d7d.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+		<script src="./api.js"></script>
+		<script src="./models/RecipeModel.js"></script>
+		<script src="./views/RecipeSearchResultsOptionsView.js"></script>
+		<script src="./views/RecipeSelectedRecipesListView.js"></script>
+		<script src="./controllers/RecipeController.js"></script>
 	</head>
 	
 	<body>
-		<div ng-app="craftomatic" ng-controller="craftomaticCtrl" ng-init="init()">
+		<div>
 			<nav class="navbar navbar-light bg-light">
-				<form class="form-inline col-6">
-					<input type="text" ng-model="search" placeholder="Search" class="form-control mr-2 col-6" />
-					<button type="submit" ng-click="doSearch()" class="btn btn-primary form-control mr-1">
-						<i class="fa fa-lg p-1 shadow" ng-class="(isSearching) ? 'fa-spinner fa-spin' : 'fa-search'" title="Search"></i>
+				<form id="searchForm" class="form-inline col-6">
+					<input type="text" placeholder="Search" class="form-control mr-2 col-6" />
+					<button type="button" class="btn btn-primary form-control mr-1" onclick="doSearch()">
+						<i id="searchIcon" class="fa fa-lg p-1 shadow fa-search" title="Search"></i>
 					</button>
-					<button type="button" ng-click="collapseAll = !collapseAll" class="btn btn-secondary form-control mr-1">
-						<i class="fa fa-expand fa-lg p-1 shadow" ng-show="collapseAll" title="Expand all recipes"></i>
-						<i class="fa fa-compress fa-lg p-1 shadow" ng-show="!collapseAll" title="Collapse all recipes"></i>
+					<button type="button" class="btn btn-secondary form-control mr-1" onclick="expandRecipes()">
+						<i class="fa fa-expand fa-lg p-1 shadow" title="Expand all recipes"></i>
+						<i class="fa fa-compress fa-lg p-1 shadow" title="Collapse all recipes" style="display: none;"></i>
 					</button>
-					<button type="button" class="btn btn-danger" ng-click="clearAll()" title="Remove all recipes">
+					<button type="button" class="btn btn-danger" title="Remove all recipes" onclick="deleteAll()">
 						<i class="fa fa-trash fa-lg p-1 shadow"></i>
 					</button>
 				</form>
 				<form class="form-inline col-5">
-					<select name="recipeSelector" ng-model="recipeSelection" ng-options="recipe as recipe.name + ' (' + recipe.class_name + ')' for recipe in recipes | orderBy: 'name'" class="form-control col-12">
+					<select id="recipeSelector" name="recipeSelector" class="form-control col-12">
 						<option value="" selected="selected">
-							{{ (recipes.length > 0) ? "Choose a recipe!" : "No recipes yet. Search for one!" }}
+							No recipes yet. Search for one!
 						</option>
 					</select>
 				</form>
 			</nav>
 
-			<div class="container-fluid px-4">
-				<div class="row no-gutters">
-					<div class="col-3" ng-repeat="recipe in selectedRecipes">
-						<div class="card">
-							<div class="card-header text-center">
-								<a href="#{{ $index }}" data-toggle="collapse"><img ng-src="{{ recipe.icon }}" class="header float-left" width="50" height="50"></a>
-								<h4 class="card-title">
-									{{ recipe.name }}
-								</h4>
-								<p class="card-text">{{ recipe.class_name }} {{ recipe.level }}</p>
-								<a href="#" ng-click="delete($index)" class="cancel"><i class="fa fa-times fa-lg"></i></a>
-							</div>
-							<div id="{{ $index }}" class="card-body collapse" ng-class="(collapseAll) ? '' : 'show'">
-								<div class="list">
-									<ul>
-										<li ng-repeat="ingredient in recipe.ingredients" mc-recipe-tree recipe="ingredient" class="mb-2">
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
+			<div class="container-fluid">
+				<div id="selectedRecipesContainer" class="row">
+					<!-- Selected recipes will be added here -->
 				</div>
 			</div>
-		
 		</div>
-			
-		<script src="craftomaticApp.js"></script>
-		<script src="craftomaticCtrl.js"></script>
+
+		<script>
+			const recipeModel = new RecipeModel();
+			const recipeController = new RecipeController(recipeModel);
+			const recipeSearchResultsOptionsView = new RecipeSearchResultsOptionsView("#recipeSelector");
+			const recipeSelectedRecipesListView = new RecipeSelectedRecipesListView("#selectedRecipesContainer");
+
+			// Register observers
+			recipeModel.addSearchResultsObserver(recipeSearchResultsOptionsView);
+			recipeModel.addSelectedRecipeObserver(recipeSelectedRecipesListView);
+
+			// Initial notification to populate list with data from localStorage if it exists
+			recipeModel.notifySelectedRecipeObservers();
+
+			function doSearch() {
+				$("#searchIcon").removeClass("fa-search").addClass("fa-spinner fa-spin");
+				var searchString = $("input[placeholder='Search']").val();
+				recipeController.search(searchString, callbacks = {
+					complete: function() {
+						$("#searchIcon").removeClass("fa-spinner fa-spin").addClass("fa-search");
+					}
+				});
+			}
+
+			function selectRecipe() {
+				var selectedRecipeId = $("#recipeSelector").val();
+				recipeController.select(selectedRecipeId);
+			}
+
+			function deleteRecipe(recipeId) {
+				bootbox.confirm("Are you sure you want to delete this recipe?", function(result) {
+					if (result) {
+						recipeController.remove(recipeId);
+					}
+				});
+			}
+
+			$(document).ready(function() {
+				$("#searchForm").on('submit', function(e) {
+					e.preventDefault();
+					doSearch();
+				});
+
+				$("#recipeSelector").change(selectRecipe);
+			});
+
+		</script>
 	</body>
 </html>
