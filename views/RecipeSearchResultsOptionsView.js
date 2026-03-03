@@ -5,6 +5,12 @@ class RecipeSearchResultsOptionsView {
 
     update(searchResults) {
         this.container.empty();
+
+        if (searchResults.length === 0) {
+            this.container.append($("<option disabled selected value>No results found!</option>"));
+            return;
+        }
+        
         this.container.append($("<option disabled selected value>Choose a recipe!</option>"));
         searchResults.forEach(result => {
             var option = $("<option></option>");
