@@ -18,7 +18,7 @@ class RecipeSelectedRecipesListView {
                     <span>
                         <img src="${ingredient.icon}" class="icon" width="40" height="40">
                         <span>
-                            <input type="number" class="quantity ml-1" value="${ingredient.have}" min="0" max="${ingredient.quantity}"> / <b>${ingredient.quantity}</b>
+                            <input id="${ingredient.id}" type="number" class="quantity ml-1" value="${ingredient.have}" min="0" max="${ingredient.quantity}"> / <b>${ingredient.quantity}</b>
                         </span>
                         <span class="ml-1">${ingredient.name}</span>
                         <i class="fa fa-check" style="display: none;"></i>
@@ -28,7 +28,7 @@ class RecipeSelectedRecipesListView {
         });
 
         var recipeCard = `
-            <div id="${recipe.domid}" data-recipeid="${recipe.id}" class="col-12 col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
+            <div id="${recipe.domid}" data-recipeid="${recipe.id}" class="recipe col-12 col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
                 <div class="card">
                     <div class="card-header text-center">
                         <a href="#${recipe.id}" data-toggle="collapse"><img src="${recipe.icon}" class="header float-left" width="50" height="50"></a>

@@ -65,6 +65,38 @@
 			// Initial notification to populate list with data from localStorage if it exists
 			recipeModel.notifySelectedRecipeObservers();
 
+			function toggleQuantityDisplay(input) {
+				let ingredientName = input.parent().siblings("span");
+				let quantityDisplay = input.siblings("b");
+				let checkMark = input.parent().siblings("i");
+
+				if (input.val() === input.attr("max")) {
+					ingredientName.addClass("complete");
+					quantityDisplay.addClass("complete");
+					checkMark.show();
+				} else {
+					ingredientName.removeClass("complete");
+					quantityDisplay.removeClass("complete");
+					checkMark.hide();
+				}
+			}
+
+			function checkQuantities() {
+				$(".quantity").each(function() {
+					toggleQuantityDisplay($(this));
+				});
+			}
+
+			function updateQuantityDisplay() {
+				let recipeId = $(this).closest(".recipe").attr("id");
+				let ingredientId = $(this).attr("id");
+				let quantityValue = $(this).val();
+
+				toggleQuantityDisplay($(this));
+
+				recipeController.updateQuantity(recipeId, ingredientId, quantityValue);
+			}
+
 			function doSearch() {
 				$("#searchIcon").removeClass("fa-search").addClass("fa-spinner fa-spin");
 				var searchString = $("input[placeholder='Search']").val();
@@ -77,7 +109,11 @@
 
 			function selectRecipe() {
 				var selectedRecipeId = $("#recipeSelector").val();
-				recipeController.select(selectedRecipeId);
+				recipeController.select(selectedRecipeId, callbacks = {
+					success: function(recipe) {
+						$(`#${recipe.domid} .quantity`).change(updateQuantityDisplay);
+					}
+				});
 			}
 
 			function deleteRecipe(recipeId) {
@@ -95,6 +131,9 @@
 				});
 
 				$("#recipeSelector").change(selectRecipe);
+				$(".quantity").change(updateQuantityDisplay);
+
+				checkQuantities();
 			});
 
 		</script>

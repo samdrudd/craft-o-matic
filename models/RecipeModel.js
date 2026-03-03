@@ -156,6 +156,19 @@ class RecipeModel {
         });
     }
 
+    updateQuantity(recipeId, ingredientId, quantity, callbacks = {}) {
+        this.selectedRecipes.forEach(recipe => {
+            if (recipe.domid == recipeId) {
+                recipe.ingredients.forEach(ingredient => {
+                    if (ingredient.id == ingredientId) {
+                        ingredient.have = quantity;
+                    }
+                });
+            }
+        });
+        this.updateLocalStorage();
+    }
+
     remove(recipeId, callbacks = {}) {
         this.selectedRecipes = this.selectedRecipes.filter(recipe => recipe.domid !== recipeId);
         this.selectedRecipeData.domid = recipeId;

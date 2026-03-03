@@ -14,4 +14,8 @@ class RecipeController {
     remove(recipeId, callbacks = {}) {
         this.model.remove(recipeId, callbacks);
     }
+
+    updateQuantity(recipeId, ingredientId, quantity, callbacks = {}) {
+        this.model.updateQuantity(recipeId, ingredientId, quantity, callbacks);
+    }
 }
